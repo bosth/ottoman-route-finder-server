@@ -1,0 +1,17 @@
+services:
+
+ app:
+   container_name: ottoman-route
+   image: node:latest
+   volumes:
+    - ./app:/home/node/app
+   working_dir: /home/node/app
+   ports:
+    - 8080:8080
+   command: bash -c "npm ci && npm start"
+   healthcheck:
+     test: ["CMD", "curl", "-f", "http://localhost:8080/nodes"]
+     interval: 1m
+     timeout: 10s
+     retries: 10
+   restart: on-failure:3
