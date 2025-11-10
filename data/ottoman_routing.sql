@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict F0VY2F6OPnVufBN52DuEF91DMZ3fKqfilwDfrnfVGdHWV69u8t4Y4x0j6eTYAmJ
+\restrict dfroa9Ji2cbR14tdVRfRJfnzawpcsQ71xS2Z37BZBRUet5kedMBmeTohSGbCygv
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -313,7 +313,7 @@ CREATE MATERIALIZED VIEW routing.edge AS
     edge.source,
     edge.target,
         CASE
-            WHEN (edge.cost IS NULL) THEN (((public.st_length((edge.geom)::public.geography, true) / (m.speed)::double precision) * (60)::double precision))::integer
+            WHEN (edge.cost IS NULL) THEN ((((public.st_length((edge.geom)::public.geography, true) / (m.speed)::double precision) * (60)::double precision))::integer + m.wait)
             ELSE edge.cost
         END AS cost,
     m.name AS mode,
@@ -2731,5 +2731,5 @@ REFRESH MATERIALIZED VIEW routing.edge;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict F0VY2F6OPnVufBN52DuEF91DMZ3fKqfilwDfrnfVGdHWV69u8t4Y4x0j6eTYAmJ
+\unrestrict dfroa9Ji2cbR14tdVRfRJfnzawpcsQ71xS2Z37BZBRUet5kedMBmeTohSGbCygv
 
