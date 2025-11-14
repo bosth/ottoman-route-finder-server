@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict sRbyHKCayAcnJ3ZLWl4PcoPsX5fGow0wtKpPADbbJxlMgioiJQI84dEBkKMFSel
+\restrict wFRnQXxmLDlQ4uk5q5JJGImYAAkBhGueaBtz3VsBGl0Rjjd64Oqh4tIh6A9NaNJ
 
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
@@ -408,11 +408,13 @@ CREATE VIEW routing.edge_edit AS
     pl.open,
     pl.close,
     l.name AS line,
+    m.name AS mode,
     p.geom
    FROM routing.path_line pl,
     routing.path p,
-    routing.line l
-  WHERE ((pl.path = p.id) AND (pl.line = l.id));
+    routing.line l,
+    routing.mode m
+  WHERE ((pl.path = p.id) AND (pl.line = l.id) AND (l.mode = m.id));
 
 
 ALTER VIEW routing.edge_edit OWNER TO postgres;
@@ -562,10 +564,12 @@ COPY routing.line (id, name, mode, operator) FROM stdin;
 12	steam tram	12	\N
 8	rail	8	\N
 3	ferry	3	\N
+17	Tramways Libanais	12	Tramways Libanais
 13	Mudanya-Bursa hattı	8	\N
 15	Şam Tramvayı	7	Şam-ı Şerif\nŞehri Elektrik Tramvay ve Tenviri Anonim Şirket-i Şahane-i Osmaniyesi
-16	Beyrut ve Şam-ı Şerif ve Havran Demiryolu	8	Beyrut ve Şam-ı Şerif ve Havran Osmanlı İktisadî Demiryolu Şirketi
-17	Tramways Libanais	8	Tramways Libanais
+18	Hicâz Demiryolu	8	\N
+19	Necef-i Şerif Tramvayı	5	Necef-i Şerif Tramvay Şirketi Osmaniyesi
+16	Beyrut ve Şam-ı Şerif ve Havran Demiryolu	8	Beyrut ve Şam-ı Şerif ve Havran Osmanlı İktisadî Demiryolu Şirketi /‘Société Ottomane du Chemin de fer Damas-Hama et\nProlongements
 14	Beyrut Tramvayı	7	Beyrut Tramvay ve Elektrik Şirket-i Osmaniyesi
 \.
 
@@ -2619,12 +2623,8 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 523	754	8	1895-08-01	\N	\N	t
 524	750	8	1896-07-01	\N	\N	t
 526	791	8	1912-01-01	\N	\N	t
-528	803	5	1908-01-01	\N	\N	t
 289	809	8	1866-01-01	\N	\N	t
-533	845	8	1903-01-01	\N	\N	t
-541	863	12	1895-01-01	\N	9	t
 359	278	8	1895-01-01	\N	\N	t
-542	862	12	1895-01-01	\N	6	t
 355	\N	8	1874-01-01	\N	\N	t
 265	108	8	1860-01-01	\N	20	t
 261	109	8	1860-01-01	\N	10	t
@@ -2673,6 +2673,10 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 441	371	8	1888-01-01	\N	\N	t
 442	378	8	1874-01-01	\N	\N	t
 443	379	8	1874-01-01	\N	\N	t
+542	862	17	1895-01-01	\N	6	t
+528	803	19	1908-01-01	\N	\N	t
+541	863	17	1895-01-01	\N	9	t
+533	845	16	1903-01-01	\N	\N	t
 444	375	8	1874-01-01	\N	\N	t
 445	380	8	1874-01-01	\N	\N	t
 446	376	8	1874-01-01	\N	\N	t
@@ -2699,7 +2703,6 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 338	502	8	1872-01-01	\N	\N	t
 339	501	8	1872-01-01	\N	\N	t
 324	885	8	1906-01-01	\N	\N	t
-545	849	12	1895-01-01	\N	4	t
 467	422	8	1894-01-01	\N	\N	t
 468	423	8	1894-01-01	\N	\N	t
 469	414	8	1894-01-01	\N	\N	t
@@ -2737,12 +2740,6 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 511	618	8	1860-01-01	\N	\N	t
 512	617	8	1883-01-01	\N	\N	t
 513	615	8	1883-01-01	\N	\N	t
-589	928	8	1906-01-01	\N	\N	t
-590	929	8	1894-01-01	\N	\N	t
-591	948	8	1894-01-01	\N	\N	t
-592	944	8	1895-01-01	\N	\N	t
-593	943	8	1895-01-01	\N	\N	t
-594	942	8	1895-01-01	\N	\N	t
 514	638	8	1890-01-01	\N	\N	t
 515	712	8	1894-12-01	\N	\N	t
 516	713	8	1894-12-01	\N	\N	t
@@ -2756,51 +2753,10 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 530	843	8	1902-01-01	\N	\N	t
 531	840	8	1902-01-01	\N	\N	t
 532	842	8	1902-01-01	\N	\N	t
-595	930	8	1895-01-01	\N	\N	t
 539	\N	12	1895-01-01	\N	6	t
 540	\N	12	1895-01-01	\N	9	t
-596	947	8	1895-01-01	\N	\N	t
-544	848	12	1895-01-01	\N	8	t
-546	864	12	1895-01-01	\N	8	t
-550	868	12	1895-01-01	\N	\N	t
-597	933	8	1895-01-01	\N	\N	t
-598	934	8	1895-01-01	\N	\N	t
-599	935	8	1895-01-01	\N	\N	t
-600	938	8	1895-01-01	\N	\N	t
-601	939	8	1895-01-01	\N	\N	t
-602	940	8	1895-01-01	\N	\N	t
-603	941	8	1895-01-01	\N	\N	t
-547	867	12	1908-01-01	\N	8	t
-548	870	12	1908-01-01	\N	7	t
-549	869	12	1908-01-01	\N	8	t
-543	872	12	1895-01-01	\N	7	t
-551	871	12	1895-01-01	\N	6	t
-552	873	8	1895-01-01	\N	\N	t
-553	874	8	1895-01-01	\N	\N	t
-554	875	8	1895-01-01	\N	\N	t
-555	876	8	1895-01-01	\N	\N	t
-556	879	8	1895-01-01	\N	\N	t
-557	877	8	1895-01-01	\N	\N	t
-558	878	8	1895-01-01	\N	\N	t
-559	880	8	1895-01-01	\N	\N	t
-560	884	8	1895-01-01	\N	\N	t
-561	883	8	1895-01-01	\N	\N	t
-562	882	8	1895-01-01	\N	\N	t
-563	881	8	1895-01-01	\N	\N	t
 575	912	8	1902-01-01	\N	\N	t
 576	913	8	1902-01-01	\N	\N	t
-577	916	8	1895-01-01	\N	\N	t
-578	917	8	1895-01-01	\N	\N	t
-579	918	8	1895-01-01	\N	\N	t
-580	919	8	1895-01-01	\N	\N	t
-581	920	8	1895-01-01	\N	\N	t
-582	921	8	1895-01-01	\N	\N	t
-583	922	8	1895-01-01	\N	\N	t
-584	923	8	1895-01-01	\N	\N	t
-585	924	8	1895-01-01	\N	\N	t
-586	925	8	1895-01-01	\N	\N	t
-587	926	8	1895-01-01	\N	\N	t
-588	927	8	1895-01-01	\N	\N	t
 299	80	13	1892-01-01	\N	\N	t
 300	164	13	1892-01-01	\N	\N	t
 301	165	13	1892-01-01	\N	\N	t
@@ -2812,12 +2768,60 @@ COPY routing.path_line (id, path, line, open, close, cost, reverse) FROM stdin;
 568	903	14	1908-01-01	\N	\N	t
 570	887	14	1908-01-01	\N	\N	t
 569	910	14	1908-01-01	\N	\N	t
+548	870	17	1908-01-01	\N	7	t
 564	889	14	1908-01-01	\N	\N	f
 572	906	14	1908-01-01	\N	\N	t
 565	897	14	1908-01-01	\N	\N	f
 573	898	14	1908-01-01	\N	\N	t
 574	886	14	1908-01-01	\N	\N	t
 604	911	14	1908-01-01	\N	\N	t
+545	849	17	1895-01-01	\N	4	t
+546	864	17	1895-01-01	\N	8	t
+549	869	17	1908-01-01	\N	8	t
+547	867	17	1908-01-01	\N	8	t
+543	872	17	1895-01-01	\N	7	t
+544	848	17	1895-01-01	\N	8	t
+550	868	17	1895-01-01	\N	\N	t
+558	878	16	1895-01-01	\N	\N	t
+554	875	16	1895-01-01	\N	\N	t
+551	871	17	1895-01-01	\N	6	t
+555	876	16	1895-01-01	\N	\N	t
+552	873	16	1895-01-01	\N	\N	t
+557	877	16	1895-01-01	\N	\N	t
+588	927	16	1895-01-01	\N	\N	t
+553	874	16	1895-01-01	\N	\N	t
+585	924	16	1895-01-01	\N	\N	t
+561	883	16	1895-01-01	\N	\N	t
+560	884	16	1895-01-01	\N	\N	t
+598	934	16	1915-01-01	1915-01-01	\N	t
+586	925	16	1895-01-01	\N	\N	t
+577	916	16	1895-01-01	\N	\N	t
+579	918	16	1895-01-01	\N	\N	t
+581	920	16	1895-01-01	\N	\N	t
+582	921	16	1895-01-01	\N	\N	t
+580	919	16	1895-01-01	\N	\N	t
+578	917	16	1895-01-01	\N	\N	t
+559	880	16	1895-01-01	\N	\N	t
+563	881	16	1895-01-01	\N	\N	t
+562	882	16	1895-01-01	\N	\N	t
+589	928	18	1906-01-01	\N	\N	t
+596	947	16	1895-01-01	1915-01-01	\N	t
+597	933	16	1895-01-01	1915-01-01	\N	t
+599	935	16	1895-01-01	1915-01-01	\N	t
+600	938	16	1895-01-01	1915-01-01	\N	t
+601	939	16	1895-01-01	1915-01-01	\N	t
+602	940	16	1895-01-01	1915-01-01	\N	t
+603	941	16	1895-01-01	1915-01-01	\N	t
+594	942	16	1895-01-01	1915-01-01	\N	t
+593	943	16	1895-01-01	1915-01-01	\N	t
+591	948	16	1894-01-01	1915-01-01	\N	t
+556	879	16	1895-01-01	\N	\N	t
+587	926	16	1895-01-01	\N	\N	t
+583	922	16	1895-01-01	\N	\N	t
+584	923	16	1895-01-01	\N	\N	t
+590	929	16	1894-01-01	1915-01-01	\N	t
+595	930	16	1895-01-01	1915-01-01	\N	t
+592	944	16	1895-01-01	1915-01-01	\N	t
 \.
 
 
@@ -2845,7 +2849,7 @@ COPY routing.rank (id, name, size) FROM stdin;
 -- Name: line_id_seq; Type: SEQUENCE SET; Schema: routing; Owner: postgres
 --
 
-SELECT pg_catalog.setval('routing.line_id_seq', 17, true);
+SELECT pg_catalog.setval('routing.line_id_seq', 19, true);
 
 
 --
@@ -2866,7 +2870,7 @@ SELECT pg_catalog.setval('routing.mode_id_seq', 2, true);
 -- Name: path_id_seq; Type: SEQUENCE SET; Schema: routing; Owner: postgres
 --
 
-SELECT pg_catalog.setval('routing.path_id_seq', 948, true);
+SELECT pg_catalog.setval('routing.path_id_seq', 950, true);
 
 
 --
@@ -3033,5 +3037,5 @@ REFRESH MATERIALIZED VIEW routing.edge;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict sRbyHKCayAcnJ3ZLWl4PcoPsX5fGow0wtKpPADbbJxlMgioiJQI84dEBkKMFSel
+\unrestrict wFRnQXxmLDlQ4uk5q5JJGImYAAkBhGueaBtz3VsBGl0Rjjd64Oqh4tIh6A9NaNJ
 
